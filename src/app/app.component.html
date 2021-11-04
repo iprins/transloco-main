@@ -1,0 +1,14 @@
+<ng-container *transloco="let t">
+
+<div>
+<button (click)="setLang('en')">{{t('english')}}</button>
+<button (click)="setLang('es')">{{t('spanish')}}</button>
+</div>
+<br>
+<div>
+  {{ 'hello' | transloco }}
+</div>
+
+<lib-my-lib></lib-my-lib>
+
+</ng-container>
