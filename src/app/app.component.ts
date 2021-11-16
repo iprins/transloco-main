@@ -14,7 +14,7 @@ export class AppComponent {
 
   setLang(lang: 'en' | 'es') {
     this.translocoService.setActiveLang(lang);
-    // this.libService.setLang(lang);
+    this.libService.setLang(lang);
   }
 
 }
