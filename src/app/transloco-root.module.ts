@@ -5,10 +5,12 @@ import {
   TranslocoLoader,
   TRANSLOCO_CONFIG,
   translocoConfig,
-  TranslocoModule
+  TranslocoModule,
+  TRANSLOCO_SCOPE
 } from '@ngneat/transloco';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
@@ -19,20 +21,51 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   }
 }
 
+export type AvailableLang = string | { id: string; label: string } | undefined;
+
 @NgModule({
-  exports: [ TranslocoModule ],
-  providers: [
-    {
-      provide: TRANSLOCO_CONFIG,
-      useValue: translocoConfig({
-        availableLangs: ['en', 'es'],
-        defaultLang: 'en',
-        // Remove this option if your application doesn't support changing language in runtime.
-        reRenderOnLangChange: true,
-        prodMode: environment.production,
-      })
-    },
-    { provide: TRANSLOCO_LOADER, useClass: TranslocoHttpLoader }
-  ]
+  imports: [TranslocoModule],
+  exports: [ TranslocoModule, CommonModule ],
+  // providers: [
+  //   {
+  //     provide: TRANSLOCO_CONFIG,
+  //     useValue: translocoConfig({
+  //       availableLangs: ['en', 'es'],
+  //       defaultLang: 'en',
+  //       // Remove this option if your application doesn't support changing language in runtime.
+  //       reRenderOnLangChange: true,
+  //       prodMode: environment.production,
+  //     })
+  //   },
+  //   { provide: TRANSLOCO_LOADER, useClass: TranslocoHttpLoader }
+  // ]
 })
-export class TranslocoRootModule {}
+export class TranslocoRootModule {
+  static forRoot(prodMode: boolean): ModuleWithProviders<TranslocoRootModule> {
+    return {
+      ngModule: TranslocoRootModule, 
+      providers: [
+          {
+            provide: TRANSLOCO_CONFIG,
+            useValue: translocoConfig({
+              availableLangs: ['en', 'es'],
+              defaultLang: 'en',
+              // Remove this option if your application doesn't support changing language in runtime.
+              reRenderOnLangChange: true,
+              prodMode: prodMode,
+            })
+          },
+          { provide: TRANSLOCO_LOADER, useClass: TranslocoHttpLoader }
+        ]
+    };
+  }
+
+  static forChild(scopeName: string, loader: any): ModuleWithProviders<TranslocoRootModule> {
+    return {
+      ngModule: TranslocoRootModule,
+      providers: [
+        { provide: TRANSLOCO_SCOPE, useValue: { scope: scopeName, loader }}
+      ]
+    };
+  }
+}

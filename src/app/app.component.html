@@ -9,6 +9,8 @@
   {{ 'hello' | transloco }}
 </div>
 
-<lib-my-lib></lib-my-lib>
+<button (click)="demoRequest()">App component request</button>
+<button routerLink="/demo">Go to Demo</button>
 
+<router-outlet></router-outlet>
 </ng-container>
