@@ -4,9 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DemoComponent } from './demo.component';
 import { DemoRoutingModule } from './demo-routing.module';
 import { AuthInterceptor } from 'src/app/auth.interceptor';
-// import { MyLibModule} from 'my-workspace/dist/my-lib';
-import { TranslocoRootModule } from 'src/app/transloco-root.module';
-
+import { MyLibModule} from 'my-workspace/dist/my-lib';
 
 
 @NgModule({
@@ -16,7 +14,7 @@ import { TranslocoRootModule } from 'src/app/transloco-root.module';
   imports: [
     HttpClientModule,
     DemoRoutingModule,
-    
+    MyLibModule,
   ],
   exports: [
     DemoComponent
