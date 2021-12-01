@@ -6,7 +6,8 @@ import {
   TRANSLOCO_CONFIG,
   translocoConfig,
   TranslocoModule,
-  TRANSLOCO_SCOPE
+  TRANSLOCO_SCOPE,
+  TRANSLOCO_TRANSPILER
 } from '@ngneat/transloco';
 import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
@@ -26,6 +27,8 @@ export type AvailableLang = string | { id: string; label: string } | undefined;
 @NgModule({
   imports: [TranslocoModule],
   exports: [ TranslocoModule, CommonModule ],
+
+  // Replaced, using the forRoot/forChild pattern.
   // providers: [
   //   {
   //     provide: TRANSLOCO_CONFIG,
@@ -60,11 +63,14 @@ export class TranslocoRootModule {
     };
   }
 
-  static forChild(scopeName: string, loader: any): ModuleWithProviders<TranslocoRootModule> {
+  static forChild(): ModuleWithProviders<TranslocoRootModule> {
     return {
       ngModule: TranslocoRootModule,
       providers: [
-        { provide: TRANSLOCO_SCOPE, useValue: { scope: scopeName, loader }}
+        { provide: TRANSLOCO_CONFIG, useValue: { }},
+        { provide: TRANSLOCO_LOADER, useValue: { }},
+        { provide: TRANSLOCO_TRANSPILER, useValue: {}},
+        { provide: TRANSLOCO_SCOPE, useValue:{}},
       ]
     };
   }
